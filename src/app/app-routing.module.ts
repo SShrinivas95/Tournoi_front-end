@@ -4,6 +4,7 @@ import { Partie1Component } from './partie1/partie1.component';
 
 const routes: Routes = [];
 
+
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
