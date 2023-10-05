@@ -20,6 +20,10 @@ import { environment } from '../environment/environment';
     return this.http.post<partie1>(`${this.apiServerUrl}/character/put`,character)
   }
 
+  public addCharacterList(Liste_Manga: partie1[]): Observable<partie1[]> {
+    return this.http.post<partie1[]>(`${this.apiServerUrl}/character/putAll`, Liste_Manga, { responseType: 'json' });
+  }
+
   public deleteCharacter(id: number): Observable<string> {
     return this.http.delete(`${this.apiServerUrl}/character/delete/${id}`, { responseType: 'text' });
   }

@@ -19,7 +19,6 @@ export class Partie1Component implements OnInit {
   constructor(private TournoiService: TournoiService) { }
 
   ngOnInit(): void {
-    this.getAllCharacter();
   }
 
   Liste_Manga: Array<partie1 | undefined> = new Array<partie1 | undefined>(8);
@@ -38,16 +37,6 @@ export class Partie1Component implements OnInit {
       const existe: boolean = this.isCharacterExist(personnage, this.Liste_Manga);
       if (!existe) {
         this.Liste_Manga.push(personnage);
-        this.TournoiService.addCharacter(personnage)
-          .subscribe(
-            (response: partie1) => {
-              console.log('Personnage ajouté avec succès :', response);
-              this.getAllCharacter();
-            },
-            (error: any) => {
-              console.error('Erreur lors de l\'ajout du personnage :', error);
-            })
-          ;
       }
       else {
         alert("Le personnage existe déjà");
@@ -59,31 +48,29 @@ export class Partie1Component implements OnInit {
 
   public remove(perso: any): void {
     this.Liste_Manga = this.Liste_Manga.filter(t => t?.nom != perso.nom);
-    this.TournoiService.deleteCharacter(perso.id)
-      .subscribe(
-        () => {
-          this.getAllCharacter();
-          console.log("The Character has been deleted");
-        },
-        (error: HttpErrorResponse) => {
-          alert(error.message);
-        });
-
     if (this.Liste_Manga.length <= 7) {
       this.Possible = false;
     }
   }
 
-  public getAllCharacter(): void {
-    this.TournoiService.getAllCharacter().subscribe(
-      (response: partie1[]) => {
-        this.Liste_Manga = response;
-      },
-      (error: HttpErrorResponse) => {
-        alert(error.message);
+  public ajouteListe(): void {
+    const List : partie1[] = [] ;
+    for(const charactere of this.Liste_Manga){
+      if(charactere !== undefined){
+        List.push(charactere);
       }
+    }
+    this.TournoiService.addCharacterList(List).subscribe(
+      (response: partie1[]) => { 
+        console.log("List was send : ",response); 
+      }
+      , (error: HttpErrorResponse) => 
+      { 
+        alert(error.message); }
     );
   }
+
+
 
   public isCharacterExist(character: partie1, list: Array<partie1 | undefined>): boolean {
     let existe: boolean = false;
