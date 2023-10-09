@@ -2,35 +2,39 @@ import { Component, OnInit, ɵsetAlternateWeakRefImpl } from '@angular/core';
 import { partie1 } from './app';
 import { TournoiService } from '../services/tournoi.service';
 import { HttpErrorResponse } from '@angular/common/http';
-
+import { Router } from '@angular/router';
+import { APIService } from '../services/api.service';
 @Component({
   selector: 'app-partie1',
   templateUrl: './partie1.component.html',
   styleUrls: ['./partie1.component.css']
 })
 export class Partie1Component implements OnInit {
-
-  private currentId = 1;
-
+  timeoutId:any;
   perso: partie1 = {
     nom: '',
+    anime: '',
     id: undefined,
   };
-  constructor(private TournoiService: TournoiService) { }
+  constructor(private TournoiService: TournoiService, private router: Router, private apiService: APIService) { }
 
   ngOnInit(): void {
   }
 
-  Liste_Manga: Array<partie1 | undefined> = new Array<partie1 | undefined>(8);
+
+  Liste_Manga: Array<partie1 | undefined> = [];
 
   Possible: boolean = false;
 
+  listCharacter: Array<any> = [];
+
+  userInput: string = this.perso.nom  ;
   onSubmit(): void {
     let personnage: partie1 = {
       nom: this.perso.nom,
       id: undefined,
+      anime: this.perso.anime,
     };
-
     if (this.Liste_Manga.length >= 8) {
       this.Possible = true;
     } else {
@@ -44,6 +48,7 @@ export class Partie1Component implements OnInit {
 
     }
     this.perso.nom = '';
+    this.perso.anime = '';
   }
 
   public remove(perso: any): void {
@@ -54,23 +59,26 @@ export class Partie1Component implements OnInit {
   }
 
   public ajouteListe(): void {
-    const List : partie1[] = [] ;
-    for(const charactere of this.Liste_Manga){
-      if(charactere !== undefined){
+    const List: partie1[] = [];
+    for (const charactere of this.Liste_Manga) {
+      if (charactere !== undefined) {
         List.push(charactere);
       }
     }
-    this.TournoiService.addCharacterList(List).subscribe(
-      (response: partie1[]) => { 
-        console.log("List was send : ",response); 
-      }
-      , (error: HttpErrorResponse) => 
-      { 
-        alert(error.message); }
-    );
+
+    if (List.length != 0) {
+      this.TournoiService.addCharacterList(List).subscribe(
+        (response: partie1[]) => {
+          console.log("List was sent: ", response);
+        },
+        (error: HttpErrorResponse) => {
+          alert(error.message);
+        }
+      );
+      this.router.navigate(['/affiche']);
+    }
+
   }
-
-
 
   public isCharacterExist(character: partie1, list: Array<partie1 | undefined>): boolean {
     let existe: boolean = false;
@@ -80,5 +88,31 @@ export class Partie1Component implements OnInit {
     }
     return existe;
   }
+
+  public getApiCharacter(name: string): any {
+    this.apiService.getChracterAnime(name).subscribe(
+      (response: any) => {
+        for (let i = 0; i < 5; i++) {
+          console.log(response.data[i].images.jpg.image_url);
+          this.listCharacter.push(response.data[i].images.jpg.image_url);
+        }
+      },
+      (error: HttpErrorResponse) => {
+        console.log(error.message);
+      });
+  }
+  
+
+  onInput(name: any) {
+    
+    clearTimeout(this.timeoutId);
+    this.listCharacter=[];
+    this.timeoutId = setTimeout(() => {
+      this.getApiCharacter(name);
+    }, 800);
+  }
+  
+
+  
 
 }

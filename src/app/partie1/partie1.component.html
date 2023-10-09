@@ -3,8 +3,15 @@
     <div class="form-row align-items-center">
       <div class="col-auto">
         <label class="sr-only" for="inlineFormInput">Personnage</label>
-        <input type="text" [(ngModel)]="perso.nom" [title]="perso.nom" #name="ngModel" name="nom" class="input"
-          id="inlineFormInput" placeholder="Un personnage..." [disabled]="Possible">
+        <input type="text" [(ngModel)]="perso.nom"  [title]="perso.nom" #name="ngModel" name="nom" class="input"
+          id="inlineFormInput" placeholder="Un personnage..."  (input)="onInput(perso.nom)" [disabled]="Possible">
+          <input type="text" [(ngModel)]="perso.anime" [title]="perso.anime" #name="ngModel" name="anime" class="input"
+          id="inlineFormInput" placeholder="L'animé..."  [disabled]="Possible">
+          <mat-select *ngIf="listCharacter.length>0 ">
+            <mat-option *ngFor="let character of listCharacter" id="op">
+              <img width="30%" height="30%" [src]="character"/>
+            </mat-option>
+          </mat-select>
         <div *ngIf="name.disabled" class="alert alert-warning" style="width: 65%;padding-top: 5px;padding-bottom: 5px;"
           role="alert">
           Max personnage atteint !
@@ -19,6 +26,8 @@
         <li class="list-group-item text-center">
           <div class="justify-content-center">
             {{perso?.nom}}
+            <br>
+            {{perso?.anime}}
           </div>
           <div class="d-flex justify-content-end" style="padding-left: 50%;">
             <span>
