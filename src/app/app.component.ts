@@ -9,5 +9,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AppComponent {
   title = 'Projet Tournoi';
+  ParentData :string []=["test","bof","Ah"];
 
+  recevoirData(recu : string[]) :void
+ {
+  console.log(recu);
+ }
 }

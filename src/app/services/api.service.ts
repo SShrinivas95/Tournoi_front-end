@@ -1,10 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { partie1 } from '../partie1/app';
 
 @Injectable({
+  
   providedIn: 'root'
+
 })
 export class APIService {
 

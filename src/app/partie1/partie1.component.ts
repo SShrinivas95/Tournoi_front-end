@@ -4,6 +4,9 @@ import { TournoiService } from '../services/tournoi.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { APIService } from '../services/api.service';
+import { FormControl } from '@angular/forms';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+
 @Component({
   selector: 'app-partie1',
   templateUrl: './partie1.component.html',
@@ -13,9 +16,11 @@ export class Partie1Component implements OnInit {
   timeoutId:any;
   perso: partie1 = {
     nom: '',
-    anime: '',
+    imageUrl: '',
     id: undefined,
   };
+
+  
   constructor(private TournoiService: TournoiService, private router: Router, private apiService: APIService) { }
 
   ngOnInit(): void {
@@ -33,7 +38,7 @@ export class Partie1Component implements OnInit {
     let personnage: partie1 = {
       nom: this.perso.nom,
       id: undefined,
-      anime: this.perso.anime,
+      imageUrl: this.perso.imageUrl,
     };
     if (this.Liste_Manga.length >= 8) {
       this.Possible = true;
@@ -48,7 +53,7 @@ export class Partie1Component implements OnInit {
 
     }
     this.perso.nom = '';
-    this.perso.anime = '';
+    this.perso.imageUrl = '';
   }
 
   public remove(perso: any): void {
@@ -112,6 +117,11 @@ export class Partie1Component implements OnInit {
     }, 800);
   }
   
+  OnOptionSelected(event : MatAutocompleteSelectedEvent) : void {
+
+    this.perso.imageUrl=event.option.value;
+    console.log('Option sélectionnée :', this.perso.imageUrl);
+  }
 
   
 

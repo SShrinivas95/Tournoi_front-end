@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output,Input, EventEmitter } from '@angular/core';
 import { TournoiService } from '../services/tournoi.service';
 import { partie1 } from '../partie1/app';
 import { HttpErrorResponse } from '@angular/common/http';
 import { APIService } from '../services/api.service';
+import { AppComponent } from '../app.component';
 @Component({
   selector: 'app-affiche',
   templateUrl: './affiche.component.html',
@@ -13,6 +14,7 @@ export class AfficheComponent implements OnInit {
   tab: Array<partie1> = [];
   tabImageAnime : Array<any> = [] ;
   
+
   constructor(private TournoiService: TournoiService,private APIService : APIService) {
   }
 
@@ -23,8 +25,7 @@ export class AfficheComponent implements OnInit {
     }, (error: HttpErrorResponse) => {
       alert(error.message);
     });
-
-    
   }
+
 
 }
